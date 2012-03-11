@@ -28,6 +28,7 @@ Patch9: 0001-rhbz-add-the-architecture-to-the-comment-only-if-it-.patch
 Patch10: 0001-rhbz-768647-python-doen-t-have-a-backtrace_rating-fi.patch
 
 Patch100:      libreport-2.0.8-add-mandriva-support.patch
+Patch101:	libreport-2.0.8-link.patch
 BuildRequires: dbus-devel
 BuildRequires: gtk2-devel
 BuildRequires: curl-devel
