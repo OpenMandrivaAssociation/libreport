@@ -10,7 +10,7 @@
 Summary: Generic library for reporting various problems
 Name: libreport
 Version: 2.0.8
-Release: 1
+Release: 2
 License: GPLv2+
 Group: System/Libraries
 URL: https://fedorahosted.org/abrt/
