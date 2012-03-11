@@ -9,25 +9,14 @@
 
 Summary: Generic library for reporting various problems
 Name: libreport
-Version: 2.0.8
-Release: 2
+Version: 2.0.9
+Release: 1
 License: GPLv2+
 Group: System/Libraries
 URL: https://fedorahosted.org/abrt/
 Source0: https://fedorahosted.org/released/abrt/%{name}-%{version}.tar.gz
-Patch0: 0001-allow-to-specify-bodh-url-and-fix-one-NULL-dereferen.patch
-Patch1: 0002-if-better-backtrace-is-avail-then-upload-one.patch
-Patch2: 0003-search-only-by-duphash-for-selinux.patch
-Patch3: 0004-reorganize-comments-for-bugzilla-message-body-comes-.patch
-Patch4: 0005-do-not-insert-duplicate-comment-to-bugzilla.patch
-Patch5: 0006-if-OSRelease-environ-is-empty-load-OSRelease-from-pr.patch
-Patch6: 0009-bodhi-sync-enum-with-parse_opt.patch
-Patch7: 0010-inicializing-rpm-more-then-once-leads-to-sigsegv-in-.patch
-Patch8: 0011-url-takes-escaped-string.patch
-Patch9: 0001-rhbz-add-the-architecture-to-the-comment-only-if-it-.patch
-Patch10: 0001-rhbz-768647-python-doen-t-have-a-backtrace_rating-fi.patch
 
-Patch100:      libreport-2.0.8-add-mandriva-support.patch
+Patch100:      libreport-2.0.9-add-mandriva-support.patch
 Patch101:	libreport-2.0.8-link.patch
 Patch102:	libreport-2.0.8-rpm5.patch
 BuildRequires: dbus-devel
@@ -60,6 +49,9 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %doc README COPYING
 %config(noreplace) %{_sysconfdir}/%{name}/report_event.conf
 %{_mandir}/man5/report_event.conf.5*
+%{_sysconfdir}/%{name}/forbidden_words.conf
+%{_sysconfdir}/%{name}/plugins/mailx.conf
+
 
 #--------------------------------------------------------------------
 
