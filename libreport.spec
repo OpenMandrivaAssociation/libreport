@@ -59,8 +59,6 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %files -f %{name}.lang
 %doc README COPYING
 %config(noreplace) %{_sysconfdir}/%{name}/report_event.conf
-%exclude %_libdir/libabrt_web.so
-%exclude %{_mandir}/man1/reporter-rhtsupport.1.*
 %{_mandir}/man5/report_event.conf.5*
 
 #--------------------------------------------------------------------
@@ -151,7 +149,6 @@ Development libraries and headers for libreport
 %{_includedir}/libreport/internal_abrt_dbus.h
 %{_includedir}/libreport/internal_libreport.h
 %{_libdir}/libreport.so
-%{_libdir}/libabrt_web.so
 %{_libdir}/libabrt_dbus.so
 %{_libdir}/pkgconfig/libreport.pc
 %dir %{_includedir}/libreport
@@ -187,7 +184,6 @@ with problem dump reports
 %files cli
 %{_bindir}/report-cli
 %{_mandir}/man1/report-cli.1.*
-%{_mandir}/man1/reporter-rhtsupport.1.*
 
 #--------------------------------------------------------------------
 
@@ -423,6 +419,12 @@ rm -f %buildroot/%{_sysconfdir}/libreport/events.d/rhtsupport_event.conf
 rm -f %buildroot/%{_mandir}/man1/reporter-rhtsupport.1.*
 rm -f %buildroot/%{_mandir}/man1/reporter-rhtsupport.1.xz
 rm -f %buildroot/%{_bindir}/reporter-rhtsupport
+
+rm -f %{buildroot}/%_libdir/libabrt_web.so
+rm -f %{buildroot}/%{_mandir}/man1/reporter-rhtsupport.1*
+
+
+
 
 %if %_with_tests
 %check
