@@ -151,6 +151,7 @@ Development libraries and headers for libreport
 %{_includedir}/libreport/internal_abrt_dbus.h
 %{_includedir}/libreport/internal_libreport.h
 %{_libdir}/libreport.so
+%{_libdir}/libabrt_web.so
 %{_libdir}/libabrt_dbus.so
 %{_libdir}/pkgconfig/libreport.pc
 %dir %{_includedir}/libreport
@@ -186,6 +187,7 @@ with problem dump reports
 %files cli
 %{_bindir}/report-cli
 %{_mandir}/man1/report-cli.1.*
+%{_mandir}/man1/reporter-rhtsupport.1.*
 
 #--------------------------------------------------------------------
 
@@ -403,25 +405,24 @@ CFLAGS="-fno-strict-aliasing"
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir}
+make install DESTDIR=%buildroot mandir=%{_mandir}
 %find_lang %{name}
 
 # remove all .la and .a files
-find $RPM_BUILD_ROOT -name '*.la' -or -name '*.a' | xargs rm -f
-mkdir -p $RPM_BUILD_ROOT/%{_initrddir}
-mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/events.d/
-mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/events/
+find %buildroot -name '*.la' -or -name '*.a' | xargs rm -f
+mkdir -p %buildroot/%{_initrddir}
+mkdir -p %buildroot/%{_sysconfdir}/%{name}/events.d/
+mkdir -p %buildroot/%{_sysconfdir}/%{name}/events/
 
 # After everything is installed, remove info dir
-rm -f $RPM_BUILD_ROOT/%{_infodir}/dir
+rm -f %buildroot/%{_infodir}/dir
 
-rm -f $RPM_BUILD_ROOT/%{_sysconfdir}/libreport/plugins/rhtsupport.conf
-rm -f $RPM_BUILD_ROOT/%{_sysconfdir}/libreport/events/report_RHTSupport.xml
-rm -f $RPM_BUILD_ROOT/%{_sysconfdir}/libreport/events.d/rhtsupport_event.conf
-rm -f $RPM_BUILD_ROOT/%{_mandir}/man1/reporter-rhtsupport.1.*
-rm -f $RPM_BUILD_ROOT/%{_mandir}/man1/reporter-rhtsupport.1.xz
-rm -f $RPM_BUILD_ROOT/%{_bindir}/reporter-rhtsupport
+rm -f %buildroot/%{_sysconfdir}/libreport/plugins/rhtsupport.conf
+rm -f %buildroot/%{_sysconfdir}/libreport/events/report_RHTSupport.xml
+rm -f %buildroot/%{_sysconfdir}/libreport/events.d/rhtsupport_event.conf
+rm -f %buildroot/%{_mandir}/man1/reporter-rhtsupport.1.*
+rm -f %buildroot/%{_mandir}/man1/reporter-rhtsupport.1.xz
+rm -f %buildroot/%{_bindir}/reporter-rhtsupport
 
 %if %_with_tests
 %check
