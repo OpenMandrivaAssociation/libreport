@@ -9,8 +9,8 @@
 
 Summary: Generic library for reporting various problems
 Name: libreport
-Version: 2.0.9
-Release: 1
+Version: 2.0.10
+Release: 0
 License: GPLv2+
 Group: System/Libraries
 URL: https://fedorahosted.org/abrt/
@@ -19,6 +19,7 @@ Source0: https://fedorahosted.org/released/abrt/%{name}-%{version}.tar.gz
 Patch100:      libreport-2.0.9-add-mandriva-support.patch
 Patch101:	libreport-2.0.8-link.patch
 Patch102:	libreport-2.0.8-rpm5.patch
+Patch103:   libreport-2.0.10-add-filename-cgroup.patch
 BuildRequires: dbus-devel
 BuildRequires: gtk2-devel
 BuildRequires: curl-devel
@@ -385,10 +386,14 @@ Plugin to report bugs into anonymous FTP site associated with ticketing system.
 %prep
 %setup -q
 %apply_patches
+perl -pi -e 's!-Werror!-Wno-deprecated!' configure{.ac,} */*/Makefile*
 
 %build
-autoconf
-%configure
+#autoconf
+%define Werror_cflags %nil
+autoreconf -fi
+intltoolize -f
+%configure --enable-gtk3
 CFLAGS="-fno-strict-aliasing"
 %make
 
