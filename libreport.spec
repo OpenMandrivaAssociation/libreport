@@ -39,6 +39,7 @@ BuildRequires: newt-devel
 BuildRequires: libproxy-devel
 BuildRequires: libgnome-keyring-devel
 BuildRequires: docbook-style-xsl
+BuildRequires: pkgconfig(gtk+-3.0)
 Requires: libreport-filesystem
 Requires: libreport-python = %{version}-%{release}
 
