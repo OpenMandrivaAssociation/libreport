@@ -1,0 +1,18 @@
+--- libreport-2.0.8/src/plugins/Makefile.am.link~	2012-03-11 13:59:25.561731968 +0100
++++ libreport-2.0.8/src/plugins/Makefile.am	2012-03-11 14:00:51.009823944 +0100
+@@ -72,6 +72,7 @@ reporter_bugzilla_CPPFLAGS = \
+     -Wall -Wwrite-strings
+ reporter_bugzilla_LDADD = \
+     $(GLIB_LIBS) \
++    -lxmlrpc_util \
+     ../lib/libabrt_web.la \
+     ../lib/libreport.la
+ 
+@@ -99,6 +100,7 @@ reporter_rhtsupport_LDFLAGS = -ltar
+ reporter_rhtsupport_LDADD = \
+     $(GLIB_LIBS) \
+     $(XMLRPC_LIBS) $(XMLRPC_CLIENT_LIBS) \
++    -lxmlrpc_util \
+     ../lib/libabrt_web.la \
+     ../lib/libreport.la
+ 

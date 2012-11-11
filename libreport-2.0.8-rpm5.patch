@@ -1,0 +1,47 @@
+--- libreport-2.0.8/src/plugins/abrt-bodhi.c.rpm5~	2012-03-11 14:10:44.470462760 +0100
++++ libreport-2.0.8/src/plugins/abrt-bodhi.c	2012-03-11 14:11:52.768536276 +0100
+@@ -18,10 +18,14 @@
+ */
+ 
+ #include <json/json.h>
++#include <stdint.h>
++#include <rpm/rpmtypes.h>
++#include <rpm/rpmio.h>
++#include <rpm/rpmtag.h>
+ #include <rpm/rpmts.h>
+ #include <rpm/rpmcli.h>
+ #include <rpm/rpmdb.h>
+-#include <rpm/rpmpgp.h>
++#include <rpm/rpmevr.h>
+ 
+ #include "internal_libreport.h"
+ #include "abrt_curl.h"
+@@ -333,23 +337,22 @@ static char *rpm_get_nvr_by_pkg_name(con
+     const char *errmsg = NULL;
+ 
+     rpmts ts = rpmtsCreate();
+-    rpmdbMatchIterator iter = rpmtsInitIterator(ts, RPMTAG_NAME, pkg_name, 0);
+-    Header header = rpmdbNextIterator(iter);
++    rpmmi iter = rpmtsInitIterator(ts, RPMTAG_NAME, pkg_name, 0);
++    Header header = rpmmiNext(iter);
+ 
+     if (!header)
+         goto error;
+ 
+-    nvr = headerFormat(header, "%{name}-%{version}-%{release}", &errmsg);
++    nvr = headerSprintf(header, "%{NAME}-%{VERSION}-%{RELEASE}", NULL, NULL, &errmsg);
+ 
+     if (!nvr && errmsg)
+         error_msg("cannot get nvr. reason: %s", errmsg);
+ 
+ error:
+-    rpmdbFreeIterator(iter);
+-    rpmtsFree(ts);
++    iter = rpmmiFree(iter);
++    ts = rpmtsFree(ts);
+ 
+     rpmFreeRpmrc();
+-    rpmFreeCrypto();
+     rpmFreeMacros(NULL);
+ 
+     return nvr;
