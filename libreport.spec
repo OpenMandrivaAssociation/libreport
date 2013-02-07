@@ -7,41 +7,45 @@
 
 %define _with_tests 0
 
-Summary: Generic library for reporting various problems
-Name: libreport
-Version: 2.0.13
-Release: 1
-License: GPLv2+
-Group: System/Libraries
-URL: https://fedorahosted.org/abrt/
-Source0: https://fedorahosted.org/released/abrt/%{name}-%{version}.tar.gz
+Summary:	Generic library for reporting various problems
+Name:		libreport
+Version:	2.0.10
+Release:	2
+License:	GPLv2+
+Group:		System/Libraries
+URL:		https://fedorahosted.org/abrt/
+Source0:	https://fedorahosted.org/released/abrt/%{name}-%{version}.tar.gz
 
-Patch100:      libreport-2.0.9-add-mandriva-support.patch
+Patch100:	libreport-2.0.9-add-mandriva-support.patch
 Patch101:	libreport-2.0.8-link.patch
 Patch102:	libreport-2.0.8-rpm5.patch
-Patch103:   libreport-2.0.10-add-filename-cgroup.patch
-BuildRequires: dbus-devel
-BuildRequires: gtk2-devel
-BuildRequires: curl-devel
-BuildRequires: desktop-file-utils
-BuildRequires: xmlrpc-c-devel
-BuildRequires: python-devel
-BuildRequires: gettext
-BuildRequires: libxml2-devel
-BuildRequires: libtar-devel
-BuildRequires: intltool
-BuildRequires: libtool
-BuildRequires: nss-devel
-BuildRequires: texinfo
-BuildRequires: asciidoc
-BuildRequires: xmlto
-BuildRequires: newt-devel
-BuildRequires: libproxy-devel
-BuildRequires: libgnome-keyring-devel
-BuildRequires: docbook-style-xsl
-BuildRequires: pkgconfig(gtk+-3.0)
-Requires: libreport-filesystem
-Requires: libreport-python = %{version}-%{release}
+Patch103:	libreport-2.0.10-add-filename-cgroup.patch
+
+BuildRequires:	asciidoc
+BuildRequires:	desktop-file-utils
+BuildRequires:	docbook-style-xsl
+BuildRequires:	gettext
+BuildRequires:	intltool
+BuildRequires:	libtool
+BuildRequires:	texinfo
+BuildRequires:	xmlto
+
+BuildRequires:	libgnome-keyring-devel
+BuildRequires:	libtar-devel
+
+BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
+BuildRequires:	pkgconfig(libcurl)
+BuildRequires:	pkgconfig(libnewt)
+BuildRequires:	pkgconfig(libproxy-1.0)
+BuildRequires:	pkgconfig(libxml-2.0)
+BuildRequires:	pkgconfig(nss)
+BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(xmlrpc)
+
+Requires:	libreport-filesystem
+Requires:	libreport-python = %{version}-%{release}
 
 %description
 Libraries providing API for reporting different problems in applications
@@ -60,14 +64,14 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %define lib_major_dbus 0
 %define libname_dbus %mklibname report-abrt_dbus %{lib_major_dbus}
 
-%package -n %libname_dbus
-Summary: GTK front-end for libreport
-Group:   System/Libraries
+%package -n %{libname_dbus}
+Summary:	GTK front-end for libreport
+Group:		System/Libraries
 
-%description -n %libname_dbus
+%description -n %{libname_dbus}
 Applications for reporting bugs using libreport backend
 
-%files -n %libname_dbus
+%files -n %{libname_dbus}
 %{_libdir}/libabrt_dbus.so.%{lib_major_dbus}*
 
 #--------------------------------------------------------------------
@@ -75,14 +79,14 @@ Applications for reporting bugs using libreport backend
 %define lib_major_web 0
 %define libname_web %mklibname report-abrt_web %{lib_major_web}
 
-%package -n %libname_web
-Summary: GTK front-end for libreport
-Group:   System/Libraries
+%package -n %{libname_web}
+Summary:	GTK front-end for libreport
+Group:		System/Libraries
 
-%description -n %libname_web
+%description -n %{libname_web}
 Applications for reporting bugs using libreport backend
 
-%files -n %libname_web
+%files -n %{libname_web}
 %{_libdir}/libabrt_web.so.%{lib_major_web}*
 
 #--------------------------------------------------------------------
@@ -90,21 +94,21 @@ Applications for reporting bugs using libreport backend
 %define lib_major 0
 %define libname %mklibname report %{lib_major}
 
-%package -n %libname
-Summary: GTK front-end for libreport
-Group:   System/Libraries
+%package -n %{libname}
+Summary:	GTK front-end for libreport
+Group:		System/Libraries
 
-%description -n %libname
+%description -n %{libname}
 Applications for reporting bugs using libreport backend
 
-%files -n %libname
+%files -n %{libname}
 %{_libdir}/libreport.so.%{lib_major}*
 
 #--------------------------------------------------------------------
 
 %package filesystem
-Summary: Filesystem layout for libreport
-Group:   File tools
+Summary:	Filesystem layout for libreport
+Group:		File tools
 
 %description filesystem
 Filesystem layout for libreport
@@ -119,20 +123,20 @@ Filesystem layout for libreport
 
 %define lib_name_devel %mklibname report -d
 
-%package -n %lib_name_devel
-Summary:  Development libraries and headers for libreport
-Group:    Development/C
-Requires: libreport = %{version}-%{release}
-Requires: %libname_dbus = %{version}-%{release}
-Requires: %libname_web = %{version}-%{release}
-Requires: %libname = %{version}-%{release}
-Provides: %name-devel = %{version}-%{release}
+%package -n %{lib_name_devel}
+Summary:	Development libraries and headers for libreport
+Group:		Development/C
+Requires:	libreport = %{version}-%{release}
+Requires:	%{libname_dbus} = %{version}-%{release}
+Requires:	%{libname_web} = %{version}-%{release}
+Requires:	%{libname} = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
 
-%description -n %lib_name_devel
+%description -n %{lib_name_devel}
 Development libraries and headers for libreport
 
-%files -n %lib_name_devel
-# Public api headers: 
+%files -n %{lib_name_devel}
+# Public api headers:
 %{_includedir}/libreport/client.h
 %{_includedir}/libreport/dump_dir.h
 %{_includedir}/libreport/event_config.h
@@ -150,12 +154,12 @@ Development libraries and headers for libreport
 #--------------------------------------------------------------------
 
 %package python
-Summary: Python bindings for report-libs
+Summary:	Python bindings for report-libs
 # Is group correct here? -
-Group: System/Libraries
-Requires: libreport = %{version}-%{release}
-Provides: report = 0.23-1
-Obsoletes: report < 0.23-1
+Group:		System/Libraries
+Requires:	libreport = %{version}-%{release}
+Provides:	report = 0.23-1
+Obsoletes:	report < 0.23-1
 
 %description python
 Python bindings for report-libs.
@@ -167,9 +171,9 @@ Python bindings for report-libs.
 #--------------------------------------------------------------------
 
 %package cli
-Summary: %{name}'s command line interface
-Group:   Graphical desktop/Other 
-Requires: %{name} = %{version}-%{release}
+Summary:	%{name}'s command line interface
+Group:		Graphical desktop/Other 
+Requires:	%{name} = %{version}-%{release}
 
 %description cli
 This package contains simple command line tool for working
@@ -182,11 +186,11 @@ with problem dump reports
 #--------------------------------------------------------------------
 
 %package newt
-Summary: %{name}'s newt interface
-Group:   Graphical desktop/Other 
-Requires: %{name} = %{version}-%{release}
-Provides: report-newt = 0.23-1
-Obsoletes: report-newt < 0.23-1
+Summary:	%{name}'s newt interface
+Group:		Graphical desktop/Other 
+Requires:	%{name} = %{version}-%{release}
+Provides:	report-newt = 0.23-1
+Obsoletes:	report-newt < 0.23-1
 
 %description newt
 This package contains a simple newt application for reporting
@@ -198,11 +202,11 @@ bugs
 #--------------------------------------------------------------------
 
 %package gtk
-Summary: GTK front-end for libreport
-Group:   Graphical desktop/GNOME
-Requires: libreport = %{version}-%{release}
-Provides: report-gtk = 0.23-1
-Obsoletes: report-gtk < 0.23-1
+Summary:	GTK front-end for libreport
+Group:		Graphical desktop/GNOME
+Requires:	libreport = %{version}-%{release}
+Provides:	report-gtk = 0.23-1
+Obsoletes:	report-gtk < 0.23-1
 
 %description gtk
 Applications for reporting bugs using libreport backend
@@ -210,37 +214,36 @@ Applications for reporting bugs using libreport backend
 %files gtk
 %{_bindir}/report-gtk
 
-
 #--------------------------------------------------------------------
 
 %define lib_major_gtk 0
 %define libname_gtk %mklibname report-gtk %{lib_major_gtk}
 
-%package -n %libname_gtk
-Summary: GTK front-end for libreport
-Group:   System/Libraries
+%package -n %{libname_gtk}
+Summary:	GTK front-end for libreport
+Group:		System/Libraries
 
-%description -n %libname_gtk
+%description -n %{libname_gtk}
 Applications for reporting bugs using libreport backend
 
-%files -n %libname_gtk
+%files -n %{libname_gtk}
 %{_libdir}/libreport-gtk.so.%{lib_major_gtk}*
 
 #--------------------------------------------------------------------
 
 %define lib_namegtk_devel %mklibname report-gtk -d
 
-%package -n %lib_namegtk_devel
-Summary: Development libraries and headers for libreport
-Group:   Development/GNOME and GTK+ 
-Requires: libreport-gtk = %{version}-%{release}
-Requires: %libname_gtk = %{version}-%{release}
-Provides: %name-gtk-devel = %{version}-%{release}
+%package -n %{lib_namegtk_devel}
+Summary:	Development libraries and headers for libreport
+Group:		Development/GNOME and GTK+ 
+Requires:	libreport-gtk = %{version}-%{release}
+Requires:	%{libname_gtk} = %{version}-%{release}
+Provides:	%{name}-gtk-devel = %{version}-%{release}
 
-%description -n %lib_namegtk_devel
+%description -n %{lib_namegtk_devel}
 Development libraries and headers for libreport-gtk
 
-%files -n %lib_namegtk_devel
+%files -n %{lib_namegtk_devel}
 %{_libdir}/libreport-gtk.so
 %{_includedir}/libreport/internal_libreport_gtk.h
 %{_libdir}/pkgconfig/libreport-gtk.pc
@@ -248,10 +251,10 @@ Development libraries and headers for libreport-gtk
 #--------------------------------------------------------------------
 
 %package plugin-kerneloops
-Summary: %{name}'s kerneloops reporter plugin
-Group: System/Libraries
-Requires: curl
-Requires: %{name} = %{version}-%{release}
+Summary:	%{name}'s kerneloops reporter plugin
+Group:		System/Libraries
+Requires:	curl
+Requires:	%{name} = %{version}-%{release}
 
 %description plugin-kerneloops
 This package contains plugin which sends kernel crash information to specified
@@ -265,14 +268,14 @@ server, usually to kerneloops.org.
 #--------------------------------------------------------------------
 
 %package plugin-logger
-Summary: %{name}'s logger reporter plugin
-Group: System/Libraries
-Requires: %{name} = %{version}-%{release}
-Obsoletes: abrt-plugin-logger < 2.0.4
-Provides: report-plugin-localsave = 0.23-1
-Obsoletes: report-plugin-localsave < 0.23-1
-Provides: report-config-localsave = 0.23-1
-Obsoletes: report-config-localsave < 0.23-1
+Summary:	%{name}'s logger reporter plugin
+Group:		System/Libraries
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	abrt-plugin-logger < 2.0.4
+Provides:	report-plugin-localsave = 0.23-1
+Obsoletes:	report-plugin-localsave < 0.23-1
+Provides:	report-config-localsave = 0.23-1
+Obsoletes:	report-config-localsave < 0.23-1
 
 %description plugin-logger
 The simple reporter plugin which writes a report to a specified file.
@@ -287,11 +290,11 @@ The simple reporter plugin which writes a report to a specified file.
 #--------------------------------------------------------------------
 
 %package plugin-mailx
-Summary: %{name}'s mailx reporter plugin
-Group: System/Libraries
-Requires: %{name} = %{version}-%{release}
-Requires: mailx
-Obsoletes: abrt-plugin-mailx < 2.0.4
+Summary:	%{name}'s mailx reporter plugin
+Group:		System/Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	mailx
+Obsoletes:	abrt-plugin-mailx < 2.0.4
 
 %description plugin-mailx
 The simple reporter plugin which sends a report via mailx to a specified
@@ -306,14 +309,14 @@ email address.
 #--------------------------------------------------------------------
 
 %package plugin-bugzilla
-Summary: %{name}'s bugzilla plugin
-Group: System/Libraries
-Requires: %{name} = %{version}-%{release}
-Obsoletes: abrt-plugin-bugzilla < 2.0.4
-Provides: report-plugin-bugzilla = 0.23-1
-Obsoletes: report-plugin-bugzilla < 0.23-1
-Provides: report-config-bugzilla-redhat-com = 0.23-1
-Obsoletes: report-config-bugzilla-redhat-com < 0.23-1
+Summary:	%{name}'s bugzilla plugin
+Group:		System/Libraries
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	abrt-plugin-bugzilla < 2.0.4
+Provides:	report-plugin-bugzilla = 0.23-1
+Obsoletes:	report-plugin-bugzilla < 0.23-1
+Provides:	report-config-bugzilla-redhat-com = 0.23-1
+Obsoletes:	report-config-bugzilla-redhat-com < 0.23-1
 
 %description plugin-bugzilla
 Plugin to report bugs into the bugzilla.
@@ -330,12 +333,12 @@ Plugin to report bugs into the bugzilla.
 #--------------------------------------------------------------------
 
 %package plugin-bodhi
-Summary: %{name}'s bodhi plugin
-BuildRequires: json-c-devel
-Group: System/Libraries
-Requires: %{name} = %{version}-%{release}
-Requires: packagekit
-BuildRequires: rpm-devel
+Summary:	%{name}'s bodhi plugin
+BuildRequires:	pkgconfig(json)
+Group:		System/Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	packagekit
+BuildRequires:	rpm-devel
 
 %description plugin-bodhi
 Search for a new updates in bodhi server
@@ -347,9 +350,9 @@ Search for a new updates in bodhi server
 #--------------------------------------------------------------------
 
 %package compat
-Summary: %{name}'s compat layer for obsoleted 'report' package
-Group: System/Libraries
-Requires: %{name}-plugin-bugzilla
+Summary:	%{name}'s compat layer for obsoleted 'report' package
+Group:		System/Libraries
+Requires:	%{name}-plugin-bugzilla
 
 %description compat
 Provides 'report' command-line tool.
@@ -361,18 +364,18 @@ Provides 'report' command-line tool.
 #--------------------------------------------------------------------
 
 %package plugin-reportuploader
-Summary: %{name}'s reportuploader plugin
-Group: System/Libraries
-Requires: %{name} = %{version}-%{release}
-Obsoletes: abrt-plugin-reportuploader < 2.0.4
-Provides: report-plugin-ftp = 0.23-1
-Obsoletes: report-plugin-ftp < 0.23-1
-Provides: report-config-ftp = 0.23-1
-Obsoletes: report-config-ftp < 0.23-1
-Provides: report-plugin-scp = 0.23-1
-Obsoletes: report-plugin-scp < 0.23-1
-Provides: report-config-scp = 0.23-1
-Obsoletes: report-config-scp < 0.23-1
+Summary:	%{name}'s reportuploader plugin
+Group:		System/Libraries
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	abrt-plugin-reportuploader < 2.0.4
+Provides:	report-plugin-ftp = 0.23-1
+Obsoletes:	report-plugin-ftp < 0.23-1
+Provides:	report-config-ftp = 0.23-1
+Obsoletes:	report-config-ftp < 0.23-1
+Provides:	report-plugin-scp = 0.23-1
+Obsoletes:	report-plugin-scp < 0.23-1
+Provides:	report-config-scp = 0.23-1
+Obsoletes:	report-config-scp < 0.23-1
 
 %description plugin-reportuploader
 Plugin to report bugs into anonymous FTP site associated with ticketing system.
@@ -399,32 +402,30 @@ CFLAGS="-fno-strict-aliasing"
 %make
 
 %install
-make install DESTDIR=%buildroot mandir=%{_mandir}
+%makeinstall_std mandir=%{_mandir}
 %find_lang %{name}
 
 # remove all .la and .a files
-find %buildroot -name '*.la' -or -name '*.a' | xargs rm -f
-mkdir -p %buildroot/%{_initrddir}
-mkdir -p %buildroot/%{_sysconfdir}/%{name}/events.d/
-mkdir -p %buildroot/%{_sysconfdir}/%{name}/events/
+find %{buildroot} -name '*.la' -or -name '*.a' | xargs rm -f
+mkdir -p %{buildroot}%{_initrddir}
+mkdir -p %{buildroot}%{_sysconfdir}/%{name}/events.d/
+mkdir -p %{buildroot}%{_sysconfdir}/%{name}/events/
 
 # After everything is installed, remove info dir
-rm -f %buildroot/%{_infodir}/dir
+rm -f %{buildroot}%{_infodir}/dir
 
-rm -f %buildroot/%{_sysconfdir}/libreport/plugins/rhtsupport.conf
-rm -f %buildroot/%{_sysconfdir}/libreport/events/report_RHTSupport.xml
-rm -f %buildroot/%{_sysconfdir}/libreport/events.d/rhtsupport_event.conf
-rm -f %buildroot/%{_mandir}/man1/reporter-rhtsupport.1.*
-rm -f %buildroot/%{_mandir}/man1/reporter-rhtsupport.1.xz
-rm -f %buildroot/%{_bindir}/reporter-rhtsupport
+rm -f %{buildroot}%{_sysconfdir}/libreport/plugins/rhtsupport.conf
+rm -f %{buildroot}%{_sysconfdir}/libreport/events/report_RHTSupport.xml
+rm -f %{buildroot}%{_sysconfdir}/libreport/events.d/rhtsupport_event.conf
+rm -f %{buildroot}%{_mandir}/man1/reporter-rhtsupport.1.*
+rm -f %{buildroot}%{_mandir}/man1/reporter-rhtsupport.1.xz
+rm -f %{buildroot}%{_bindir}/reporter-rhtsupport
 
-rm -f %{buildroot}/%_libdir/libabrt_web.so
-rm -f %{buildroot}/%{_mandir}/man1/reporter-rhtsupport.1*
+rm -f %{buildroot}%{_libdir}/libabrt_web.so
+rm -f %{buildroot}%{_mandir}/man1/reporter-rhtsupport.1*
 
-
-
-
-%if %_with_tests
+%if %{_with_tests}
 %check
 make check
 %endif
+
