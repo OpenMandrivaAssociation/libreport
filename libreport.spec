@@ -13,9 +13,8 @@ Version:	2.0.10
 Release:	2
 License:	GPLv2+
 Group:		System/Libraries
-URL:		https://fedorahosted.org/abrt/
+Url:		https://fedorahosted.org/abrt/
 Source0:	https://fedorahosted.org/released/abrt/%{name}-%{version}.tar.gz
-
 Patch100:	libreport-2.0.9-add-mandriva-support.patch
 Patch101:	libreport-2.0.8-link.patch
 Patch102:	libreport-2.0.8-rpm5.patch
@@ -29,11 +28,9 @@ BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	texinfo
 BuildRequires:	xmlto
-
-BuildRequires:	libgnome-keyring-devel
 BuildRequires:	libtar-devel
-
 BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	pkgconfig(gnome-keyring-1)
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(libcurl)
@@ -43,7 +40,6 @@ BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(xmlrpc)
-
 Requires:	libreport-filesystem
 Requires:	libreport-python = %{version}-%{release}
 
@@ -390,14 +386,15 @@ Plugin to report bugs into anonymous FTP site associated with ticketing system.
 %prep
 %setup -q
 %apply_patches
-perl -pi -e 's!-Werror!-Wno-deprecated!' configure{.ac,} */*/Makefile*
-
-%build
-#autoconf
+sed -i -e 's!-Werror!-Wno-deprecated!' configure{.ac,} */*/Makefile*
 %define Werror_cflags %nil
 autoreconf -fi
 intltoolize -f
-%configure --enable-gtk3
+
+%build
+%configure2_5x \
+	--disable-static \
+	--enable-gtk3
 CFLAGS="-fno-strict-aliasing"
 %make
 
@@ -405,8 +402,6 @@ CFLAGS="-fno-strict-aliasing"
 %makeinstall_std mandir=%{_mandir}
 %find_lang %{name}
 
-# remove all .la and .a files
-find %{buildroot} -name '*.la' -or -name '*.a' | xargs rm -f
 mkdir -p %{buildroot}%{_initrddir}
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}/events.d/
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}/events/
