@@ -40,7 +40,7 @@ BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(xmlrpc)
-BuildRequires:	json-devel
+BuildRequires:	pkgconfig(json-c)
 Requires:	libreport-filesystem
 Requires:	libreport-python = %{version}-%{release}
 
