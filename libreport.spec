@@ -40,6 +40,7 @@ BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(xmlrpc)
+BuildRequires:	json-devel
 Requires:	libreport-filesystem
 Requires:	libreport-python = %{version}-%{release}
 
@@ -330,7 +331,6 @@ Plugin to report bugs into the bugzilla.
 
 %package plugin-bodhi
 Summary:	%{name}'s bodhi plugin
-BuildRequires:	pkgconfig(json)
 Group:		System/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	packagekit
