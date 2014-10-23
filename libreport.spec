@@ -2,7 +2,7 @@
 %define Werror_cflags %nil
 
 %define _with_tests 0
-%define __noautoreq 'libxmlrpc(.*)|devel\\(libxmlrpc(.*)'
+%define __noautoreq 'devel\\(libxmlrpc(.*)'
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
