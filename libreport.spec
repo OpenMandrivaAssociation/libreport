@@ -1,7 +1,3 @@
-%{!?python_site: %define python_site %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(0)")}
-# platform-dependent
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-
 %define _disable_ld_no_undefined 1
 %define Werror_cflags %nil
 
@@ -9,18 +5,16 @@
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.0.10
-Release:	9
+Version:	2.3.0
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://fedorahosted.org/abrt/
 Source0:	https://fedorahosted.org/released/abrt/%{name}-%{version}.tar.gz
-Patch100:	libreport-2.0.9-add-mandriva-support.patch
-Patch101:	libreport-2.0.8-link.patch
-Patch102:	libreport-2.0.8-rpm5.patch
-Patch103:	libreport-2.0.10-add-filename-cgroup.patch
 
 BuildRequires:	asciidoc
+BuildRequires:	augeas
+BuildRequires:	augeas-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	docbook-style-xsl
 BuildRequires:	gettext
@@ -51,9 +45,12 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %files -f %{name}.lang
 %doc README COPYING
 %config(noreplace) %{_sysconfdir}/%{name}/report_event.conf
+%config(noreplace) %{_sysconfdir}/%{name}/forbidden_words.conf
+%config(noreplace) %{_sysconfdir}/%{name}/ignored_words.conf
+%{_datadir}/augeas/lenses/libreport.aug
+%{_mandir}/man5/forbidden_words.conf.5*
 %{_mandir}/man5/report_event.conf.5*
-%{_sysconfdir}/%{name}/forbidden_words.conf
-%{_sysconfdir}/%{name}/plugins/mailx.conf
+%{_mandir}/man5/ignored_words.conf.5*
 
 
 #--------------------------------------------------------------------
@@ -70,11 +67,12 @@ Applications for reporting bugs using libreport backend
 
 %files -n %{libname_dbus}
 %{_libdir}/libabrt_dbus.so.%{lib_major_dbus}*
+%{_datadir}/dbus-1/interfaces/*.xml
 
 #--------------------------------------------------------------------
 
 %define lib_major_web 0
-%define libname_web %mklibname report-abrt_web %{lib_major_web}
+%define libname_web %mklibname report-web %{lib_major_web}
 
 %package -n %{libname_web}
 Summary:	GTK front-end for libreport
@@ -84,7 +82,27 @@ Group:		System/Libraries
 Applications for reporting bugs using libreport backend
 
 %files -n %{libname_web}
-%{_libdir}/libabrt_web.so.%{lib_major_web}*
+%{_libdir}/libreport-web.so.%{lib_major_web}*
+
+
+#--------------------------------------------------------------------
+
+%define libname_web_devel %mklibname report-web -d
+
+%package -n %libname_web_devel
+Summary: Development libraries and headers for libreport
+Group:   Development/C
+Requires: %libname_web = %{version}-%{release}
+Provides: %name-web-devel = %{version}-%{release}
+# (cg) The below require should be automatic, but due to the text .so files, it's not
+Requires: libxmlrpc-c-devel
+
+%description -n %libname_web_devel
+Development libraries and headers for libreport-gtk
+
+%files -n %libname_web_devel
+%{_libdir}/libreport-web.so
+%{_libdir}/pkgconfig/libreport-web.pc
 
 #--------------------------------------------------------------------
 
@@ -134,12 +152,22 @@ Development libraries and headers for libreport
 
 %files -n %{lib_name_devel}
 # Public api headers:
+%{_includedir}/libreport/config_item_info.h
 %{_includedir}/libreport/client.h
 %{_includedir}/libreport/dump_dir.h
 %{_includedir}/libreport/event_config.h
+%{_includedir}/libreport/file_obj.h
 %{_includedir}/libreport/problem_data.h
 %{_includedir}/libreport/report.h
 %{_includedir}/libreport/run_event.h
+%{_includedir}/libreport/libreport_curl.h
+%{_includedir}/libreport/libreport_types.h
+%{_includedir}/libreport/workflow.h
+%{_includedir}/libreport/xml_parser.h
+%{_includedir}/libreport/problem_details_dialog.h
+%{_includedir}/libreport/problem_details_widget.h
+%{_includedir}/libreport/ureport.h
+
 # Private api headers:
 %{_includedir}/libreport/internal_abrt_dbus.h
 %{_includedir}/libreport/internal_libreport.h
@@ -150,20 +178,36 @@ Development libraries and headers for libreport
 
 #--------------------------------------------------------------------
 
-%package python
-Summary:	Python bindings for report-libs
+%package python2
+Summary:	Python2 bindings for report-libs
 # Is group correct here? -
 Group:		System/Libraries
 Requires:	libreport = %{version}-%{release}
 Provides:	report = 0.23-1
 Obsoletes:	report < 0.23-1
 
+%description python2
+Python bindings for report-libs.
+
+%files python2
+%{py2_platsitedir}/report/*
+%{py2_platsitedir}/reportclient/*
+
+#--------------------------------------------------------------------
+
+%package python
+Summary:        Python3 bindings for report-libs
+# Is group correct here? -
+Group:          System/Libraries
+Requires:       libreport = %{version}-%{release}
+Provides:       report = 0.23-1
+Obsoletes:      report < 0.23-1
+
 %description python
 Python bindings for report-libs.
 
 %files python
-%{python_sitearch}/report/*
-%{python_sitearch}/reportclient/*
+%{py_platsitedir}/report/*
 
 #--------------------------------------------------------------------
 
@@ -195,6 +239,7 @@ bugs
 
 %files newt
 %{_bindir}/report-newt
+%{_mandir}/man1/report-newt.1.*
 
 #--------------------------------------------------------------------
 
@@ -210,6 +255,7 @@ Applications for reporting bugs using libreport backend
 
 %files gtk
 %{_bindir}/report-gtk
+%{_mandir}/man1/report-gtk.1.*
 
 #--------------------------------------------------------------------
 
@@ -258,7 +304,7 @@ This package contains plugin which sends kernel crash information to specified
 server, usually to kerneloops.org.
 
 %files plugin-kerneloops
-%{_sysconfdir}/libreport/events/report_Kerneloops.xml
+%{_datadir}/libreport/events/report_Kerneloops.xml
 %{_mandir}/man*/reporter-kerneloops.*
 %{_bindir}/reporter-kerneloops
 
@@ -279,10 +325,15 @@ The simple reporter plugin which writes a report to a specified file.
 
 %files plugin-logger
 %{_sysconfdir}/libreport/events/report_Logger.conf
-%{_sysconfdir}/libreport/events/report_Logger.xml
+%{_datadir}/libreport/events/report_Logger.xml
+%{_datadir}/libreport/workflows/workflow_Logger*.xml
 %config(noreplace) %{_sysconfdir}/libreport/events.d/print_event.conf
+%config(noreplace) %{_sysconfdir}/libreport/workflows.d/report_logger.conf
 %{_bindir}/reporter-print
 %{_mandir}/man*/reporter-print.*
+%{_mandir}/man*/report_Logger.conf.*
+%{_mandir}/man*/print_event.conf.*
+%{_mandir}/man*/report_logger.conf.*
 
 #--------------------------------------------------------------------
 
@@ -298,8 +349,15 @@ The simple reporter plugin which sends a report via mailx to a specified
 email address.
 
 %files plugin-mailx
-%{_sysconfdir}/libreport/events/report_Mailx.xml
+%{_datadir}/libreport/events/report_Mailx.xml
+%config(noreplace) %{_sysconfdir}/libreport/plugins/mailx.conf
 %config(noreplace) %{_sysconfdir}/libreport/events.d/mailx_event.conf
+%config(noreplace) %{_sysconfdir}/libreport/workflows.d/report_mailx.conf
+%{_datadir}/libreport/conf.d/plugins/mailx.conf
+%{_datadir}/libreport/workflows/workflow_Mailx*.xml
+%{_mandir}/man*/mailx.conf.*
+%{_mandir}/man*/mailx_event.conf.*
+%{_mandir}/man*/report_mailx.conf.*
 %{_mandir}/man*/reporter-mailx.*
 %{_bindir}/reporter-mailx
 
@@ -320,28 +378,44 @@ Plugin to report bugs into the bugzilla.
 
 %files plugin-bugzilla
 %config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla.conf
-%{_sysconfdir}/libreport/events/report_Bugzilla.xml
+%config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla_format.conf
+%config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla_format_analyzer_libreport.conf
+%config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla_format_kernel.conf
+%config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla_formatdup.conf
+%{_datadir}/libreport/events/report_Bugzilla.xml
+%{_datadir}/libreport/events/watch_Bugzilla.xml
+%{_datadir}/libreport/conf.d/plugins/bugzilla.conf
 %config(noreplace) %{_sysconfdir}/libreport/events/report_Bugzilla.conf
 %config(noreplace) %{_sysconfdir}/libreport/events.d/bugzilla_event.conf
 # FIXME: remove with the old gui
 %{_mandir}/man1/reporter-bugzilla.1.*
+%{_mandir}/man5/bugzilla.conf.5.*
+%{_mandir}/man5/bugzilla_event.conf.5.*
+%{_mandir}/man5/bugzilla_format.conf.5.*
+%{_mandir}/man5/bugzilla_format_analyzer_libreport.conf.*
+%{_mandir}/man5/bugzilla_format_kernel.conf.5.*
+%{_mandir}/man5/bugzilla_formatdup.conf.5.*
+%{_mandir}/man5/report_Bugzilla.conf.*
 %{_bindir}/reporter-bugzilla
 
 #--------------------------------------------------------------------
 
-%package plugin-bodhi
-Summary:	%{name}'s bodhi plugin
-Group:		System/Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	packagekit
-BuildRequires:	rpm-devel
+%package plugin-ureport
+Summary: %{name}'s micro report plugin
+BuildRequires: json-c-devel
+Group: System/Libraries
+Requires: %{name} = %{version}-%{release}
 
-%description plugin-bodhi
-Search for a new updates in bodhi server
+%description plugin-ureport
+Uploads micro-report to abrt server
 
-%files plugin-bodhi
-%{_bindir}/abrt-bodhi
-%{_mandir}/man1/abrt-bodhi.1.*
+%files plugin-ureport
+%{_datadir}/libreport/events/report_uReport.xml
+%{_bindir}/reporter-ureport
+%{_mandir}/man1/reporter-ureport.1.*
+%{_mandir}/man5/ureport.conf.5.*
+%{_datadir}/libreport/conf.d/plugins/ureport.conf
+%config(noreplace) %{_sysconfdir}/libreport/plugins/ureport.conf
 
 #--------------------------------------------------------------------
 
@@ -378,25 +452,34 @@ Plugin to report bugs into anonymous FTP site associated with ticketing system.
 
 %files plugin-reportuploader
 %{_mandir}/man*/reporter-upload.*
+%{_mandir}/man*/uploader_event.conf.*
+%{_mandir}/man*/report_uploader.conf.*
 %{_bindir}/reporter-upload
-%{_sysconfdir}/libreport/events/report_Uploader.xml
+%{_datadir}/libreport/events/report_Uploader.xml
+%{_datadir}/libreport/conf.d/plugins/upload.conf
+%{_datadir}/libreport/workflows/workflow_Upload*.xml
 %config(noreplace) %{_sysconfdir}/libreport/events.d/uploader_event.conf
+%config(noreplace) %{_sysconfdir}/libreport/plugins/upload.conf
+%config(noreplace) %{_sysconfdir}/libreport/workflows.d/report_uploader.conf
+
 #--------------------------------------------------------------------
 
 %prep
 %setup -q
 %apply_patches
-sed -i -e 's!-Werror!-Wno-deprecated!' configure{.ac,} */*/Makefile*
+#sed -i -e 's!-Werror!-Wno-deprecated!' configure{.ac,} */*/Makefile*
+perl -pi -e 's|bugzilla.redhat.com|issues.openmandriva.org|g' src/plugins/report_Bugzilla.xml{,.in} src/plugins/bugzilla.conf
+
 %define Werror_cflags %nil
-autoreconf -fi
-intltoolize -f
+#autoreconf -fi
+#intltoolize -f
 
 %build
-%configure2_5x \
-	--disable-static \
-	--enable-gtk3
-CFLAGS="-fno-strict-aliasing"
-%make
+#the configure script assumes that default python is 2 and doesnt handle the case
+#where it is python 3
+export PYTHON=python2
+%configure
+%make CFLAGS="-fno-strict-aliasing" PYTHON_CFLAGS="`python2-config --cflags`" PYTHON_LIBS="`python2-config --libs`"
 
 %install
 %makeinstall_std mandir=%{_mandir}
@@ -409,15 +492,35 @@ mkdir -p %{buildroot}%{_sysconfdir}/%{name}/events/
 # After everything is installed, remove info dir
 rm -f %{buildroot}%{_infodir}/dir
 
+rm -f %{buildroot}%{_sysconfdir}/libreport/plugins/bugzilla_format_anaconda.conf
+rm -f %{buildroot}%{_sysconfdir}/libreport/plugins/bugzilla_formatdup_anaconda.conf
+rm -f %{buildroot}%{_sysconfdir}/libreport/events.d/bugzilla_anaconda_event.conf
 rm -f %{buildroot}%{_sysconfdir}/libreport/plugins/rhtsupport.conf
-rm -f %{buildroot}%{_sysconfdir}/libreport/events/report_RHTSupport.xml
+rm -f %{buildroot}%{_datadir}/libreport/events/report_RHTSupport.xml
+rm -f %{buildroot}%{_datadir}/libreport/events/report_EmergencyAnalysis.xml
 rm -f %{buildroot}%{_sysconfdir}/libreport/events.d/rhtsupport_event.conf
+rm -f %{buildroot}%{_sysconfdir}/libreport/events.d/emergencyanalysis_event.conf
 rm -f %{buildroot}%{_mandir}/man1/reporter-rhtsupport.1.*
-rm -f %{buildroot}%{_mandir}/man1/reporter-rhtsupport.1.xz
+rm -f %{buildroot}%{_mandir}/man5/anaconda_event.conf*
+rm -f %{buildroot}%{_mandir}/man5/bugzilla_anaconda_event.conf*
+rm -f %{buildroot}%{_mandir}/man5/bugzilla_format_anaconda.conf*
+rm -f %{buildroot}%{_mandir}/man5/bugzilla_formatdup_anaconda.conf*
+rm -f %{buildroot}%{_mandir}/man5/emergencyanalysis_event.conf*
+rm -f %{buildroot}%{_mandir}/man5/rhtsupport.conf*
+rm -f %{buildroot}%{_mandir}/man5/rhtsupport_event.conf*
+rm -f %{buildroot}%{_mandir}/man5/report_fedora.conf*
+rm -f %{buildroot}%{_mandir}/man5/report_rhel.conf*
+rm -f %{buildroot}%{_mandir}/man5/report_rhel_bugzilla.conf*
 rm -f %{buildroot}%{_bindir}/reporter-rhtsupport
+rm -f %{buildroot}%{_datadir}/dbus-1/interfaces/*rhtsupport*.xml
+rm -f %{buildroot}%{_datadir}/libreport/workflows/workflow*{Anaconda,Fedora,RHEL}*.xml
+rm -f %{buildroot}%{_sysconfdir}/libreport/workflows.d/anaconda_event.conf
+rm -f %{buildroot}%{_sysconfdir}/libreport/workflows.d/report_fedora.conf
+rm -f %{buildroot}%{_sysconfdir}/libreport/workflows.d/report_rhel.conf
+rm -f %{buildroot}%{_sysconfdir}/libreport/workflows.d/report_rhel_bugzilla.conf
+rm -f %{buildroot}%{_datadir}/libreport/conf.d/plugins/rhtsupport.conf
+find %{buildroot} -name *rhtsupport* -exec rm {} \;
 
-rm -f %{buildroot}%{_libdir}/libabrt_web.so
-rm -f %{buildroot}%{_mandir}/man1/reporter-rhtsupport.1*
 
 %if %{_with_tests}
 %check
