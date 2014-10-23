@@ -33,6 +33,7 @@ BuildRequires:	pkgconfig(libproxy-1.0)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(satyr)
 BuildRequires:	pkgconfig(xmlrpc)
 BuildRequires:	pkgconfig(json-c)
 Requires:	libreport-filesystem
