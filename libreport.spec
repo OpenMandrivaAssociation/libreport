@@ -6,8 +6,8 @@
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.3.0
-Release:	2
+Version:	2.5.0
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://fedorahosted.org/abrt/
@@ -98,7 +98,7 @@ Applications for reporting bugs using libreport backend
 Summary: Development libraries and headers for libreport
 Group:   Development/C
 Requires: %libname_web = %{version}-%{release}
-Provides: %name-web-devel = %{version}-%{release}
+Provides: %{name}-web-devel = %{version}-%{release}
 # (cg) The below require should be automatic, but due to the text .so files, it's not
 Requires: libxmlrpc-c-devel
 
@@ -531,4 +531,3 @@ find %{buildroot} -name *rhtsupport* -exec rm {} \;
 %check
 make check
 %endif
-
