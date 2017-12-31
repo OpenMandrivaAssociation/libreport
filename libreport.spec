@@ -4,14 +4,17 @@
 %define _with_tests 0
 %define __noautoreq 'devel\\(libxmlrpc(.*)'
 
+%bcond_with python2
+
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.3.0
-Release:	5
+Version:	2.9.3
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
-Url:		https://fedorahosted.org/abrt/
-Source0:	https://fedorahosted.org/released/abrt/%{name}-%{version}.tar.gz
+Url:		https://github.com/abrt/libreport
+Source0:	https://github.com/abrt/libreport/archive/%{version}.tar.gz
+Patch0:		libreport-2.9.3-json-c-0.13.patch
 
 BuildRequires:	asciidoc
 BuildRequires:	augeas
@@ -48,15 +51,61 @@ Libraries providing API for reporting different problems in applications
 to different bug targets like Bugzilla, ftp, trac, etc...
 
 %files -f %{name}.lang
-%doc README COPYING
+%doc COPYING
 %config(noreplace) %{_sysconfdir}/%{name}/report_event.conf
 %config(noreplace) %{_sysconfdir}/%{name}/forbidden_words.conf
 %config(noreplace) %{_sysconfdir}/%{name}/ignored_words.conf
+%config(noreplace) %{_sysconfdir}/%{name}/events.d/centos_report_event.conf
+%config(noreplace) %{_sysconfdir}/%{name}/events/report_CentOSBugTracker.conf
+%config(noreplace) %{_sysconfdir}/%{name}/events/report_Uploader.conf
+%config(noreplace) %{_sysconfdir}/%{name}/libreport.conf
+%config(noreplace) %{_sysconfdir}/%{name}/plugins/mantisbt.conf
+%config(noreplace) %{_sysconfdir}/%{name}/plugins/mantisbt_format.conf
+%config(noreplace) %{_sysconfdir}/%{name}/plugins/mantisbt_format_analyzer_libreport.conf
+%config(noreplace) %{_sysconfdir}/%{name}/plugins/mantisbt_formatdup.conf
+%config(noreplace) %{_sysconfdir}/%{name}/plugins/mantisbt_formatdup_analyzer_libreport.conf
+%config(noreplace) %{_sysconfdir}/%{name}/workflows.d/report_centos.conf
+%config(noreplace) %{_sysconfdir}/%{name}/workflows.d/report_rhel_add_data.conf
+%config(noreplace) %{_sysconfdir}/%{name}/workflows.d/report_uReport.conf
 %{_datadir}/augeas/lenses/libreport.aug
+%{_bindir}/reporter-mantisbt
+%{_bindir}/reporter-systemd-journal
+%dir %{_datadir}/libreport
+%dir %{_datadir}/libreport/conf.d
+%dir %{_datadir}/libreport/conf.d/plugins
+%dir %{_datadir}/libreport/events
+%dir %{_datadir}/libreport/workflows
+%{_datadir}/libreport/conf.d/libreport.conf
+%{_datadir}/libreport/conf.d/plugins/mantisbt.conf
+%{_datadir}/libreport/events/report_CentOSBugTracker.xml
+%{_datadir}/libreport/events/report_RHTSupport_AddData.xml
+%{_datadir}/libreport/workflows/workflow_CentOSCCpp.xml
+%{_datadir}/libreport/workflows/workflow_CentOSJava.xml
+%{_datadir}/libreport/workflows/workflow_CentOSJavaScript.xml
+%{_datadir}/libreport/workflows/workflow_CentOSKerneloops.xml
+%{_datadir}/libreport/workflows/workflow_CentOSLibreport.xml
+%{_datadir}/libreport/workflows/workflow_CentOSPython.xml
+%{_datadir}/libreport/workflows/workflow_CentOSPython3.xml
+%{_datadir}/libreport/workflows/workflow_CentOSVmcore.xml
+%{_datadir}/libreport/workflows/workflow_CentOSXorg.xml
+%{_datadir}/libreport/workflows/workflow_uReport.xml
+%{_mandir}/man1/reporter-mantisbt.1.xz
+%{_mandir}/man1/reporter-systemd-journal.1.xz
+%{_mandir}/man5/centos_report_event.conf.5.xz
+%{_mandir}/man5/libreport.conf.5.xz
 %{_mandir}/man5/forbidden_words.conf.5*
 %{_mandir}/man5/report_event.conf.5*
 %{_mandir}/man5/ignored_words.conf.5*
-
+%{_mandir}/man5/mantisbt.conf.5.xz
+%{_mandir}/man5/mantisbt_format.conf.5.xz
+%{_mandir}/man5/mantisbt_format_analyzer_libreport.conf.5.xz
+%{_mandir}/man5/mantisbt_formatdup.conf.5.xz
+%{_mandir}/man5/mantisbt_formatdup_analyzer_libreport.conf.5.xz
+%{_mandir}/man5/report_CentOSBugTracker.conf.5.xz
+%{_mandir}/man5/report_Uploader.conf.5.xz
+%{_mandir}/man5/report_centos.conf.5.xz
+%{_mandir}/man5/report_uReport.conf.5.xz
+%{_mandir}/man5/upload.conf.5.xz
 
 #--------------------------------------------------------------------
 
@@ -172,6 +221,12 @@ Development libraries and headers for libreport
 %{_includedir}/libreport/problem_details_dialog.h
 %{_includedir}/libreport/problem_details_widget.h
 %{_includedir}/libreport/ureport.h
+%{_includedir}/libreport/global_configuration.h
+%{_includedir}/libreport/helpers/testsuite.h
+%{_includedir}/libreport/helpers/testsuite_tools.h
+%{_includedir}/libreport/problem_report.h
+%{_includedir}/libreport/problem_utils.h
+%{_includedir}/libreport/reporters.h
 
 # Private api headers:
 %{_includedir}/libreport/internal_abrt_dbus.h
@@ -180,9 +235,11 @@ Development libraries and headers for libreport
 %{_libdir}/libabrt_dbus.so
 %{_libdir}/pkgconfig/libreport.pc
 %dir %{_includedir}/libreport
+%dir %{_includedir}/libreport/helpers
 
 #--------------------------------------------------------------------
 
+%if %{with python2}
 %package python2
 Summary:	Python2 bindings for report-libs
 # Is group correct here? -
@@ -197,6 +254,7 @@ Python bindings for report-libs.
 %files python2
 %{py2_platsitedir}/report/*
 %{py2_platsitedir}/reportclient/*
+%endif
 
 #--------------------------------------------------------------------
 
@@ -212,7 +270,8 @@ Obsoletes:      report < 0.23-1
 Python bindings for report-libs.
 
 %files python
-%{py_platsitedir}/report/*
+%{py_platsitedir}/report
+%{py_platsitedir}/reportclient
 
 #--------------------------------------------------------------------
 
@@ -475,16 +534,19 @@ Plugin to report bugs into anonymous FTP site associated with ticketing system.
 #sed -i -e 's!-Werror!-Wno-deprecated!' configure{.ac,} */*/Makefile*
 perl -pi -e 's|bugzilla.redhat.com|issues.openmandriva.org|g' src/plugins/report_Bugzilla.xml{,.in} src/plugins/bugzilla.conf
 
+[ -e autogen.sh ] && ./autogen.sh
+
 %define Werror_cflags %nil
 #autoreconf -fi
 #intltoolize -f
 
 %build
-#the configure script assumes that default python is 2 and doesnt handle the case
-#where it is python 3
-export PYTHON=python2
-%configure
-%make CFLAGS="-fno-strict-aliasing" PYTHON_CFLAGS="`python2-config --cflags`" PYTHON_LIBS="`python2-config --libs`"
+%configure \
+%if ! %{with python2}
+	--without-python2
+%endif
+
+%make CFLAGS="%{optflags} -fno-strict-aliasing" 
 
 %install
 %makeinstall_std mandir=%{_mandir}
