@@ -9,7 +9,7 @@
 Summary:	Generic library for reporting various problems
 Name:		libreport
 Version:	2.9.3
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
