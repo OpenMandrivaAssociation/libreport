@@ -8,13 +8,12 @@
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.9.3
-Release:	2
+Version:	2.9.5
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
 Source0:	https://github.com/abrt/libreport/archive/%{version}.tar.gz
-Patch0:		libreport-2.9.3-json-c-0.13.patch
 
 BuildRequires:	asciidoc
 BuildRequires:	augeas
@@ -51,7 +50,8 @@ Libraries providing API for reporting different problems in applications
 to different bug targets like Bugzilla, ftp, trac, etc...
 
 %files -f %{name}.lang
-%doc COPYING
+%license COPYING
+%doc %{_docdir}/%{name}/README.md
 %config(noreplace) %{_sysconfdir}/%{name}/report_event.conf
 %config(noreplace) %{_sysconfdir}/%{name}/forbidden_words.conf
 %config(noreplace) %{_sysconfdir}/%{name}/ignored_words.conf
@@ -593,4 +593,3 @@ find %{buildroot} -name *rhtsupport* -exec rm {} \;
 %check
 make check
 %endif
-
