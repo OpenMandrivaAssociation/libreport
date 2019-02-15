@@ -8,8 +8,8 @@
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.9.5
-Release:	2
+Version:	2.10.0
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
@@ -227,6 +227,7 @@ Development libraries and headers for libreport
 %{_includedir}/libreport/problem_report.h
 %{_includedir}/libreport/problem_utils.h
 %{_includedir}/libreport/reporters.h
+%{_includedir}/libreport/report_result.h
 
 # Private api headers:
 %{_includedir}/libreport/internal_abrt_dbus.h
