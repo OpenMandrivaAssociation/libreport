@@ -2,18 +2,17 @@
 %define Werror_cflags %nil
 
 %define _with_tests 0
-%define __noautoreq 'devel\\(libxmlrpc(.*)'
 
 %bcond_with python2
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.10.0
+Version:	2.11.3
 Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
-Source0:	https://github.com/abrt/libreport/archive/%{version}.tar.gz
+Source0:	https://github.com/abrt/libreport/archive/%{name}-%{version}.tar.gz
 
 BuildRequires:	asciidoc
 BuildRequires:	augeas
@@ -38,7 +37,7 @@ BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(python)
-BuildRequires:  pkgconfig(python3)
+BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(satyr)
 BuildRequires:	pkgconfig(xmlrpc)
 BuildRequires:	pkgconfig(json-c)
@@ -143,18 +142,18 @@ Applications for reporting bugs using libreport backend
 
 %define libname_web_devel %mklibname report-web -d
 
-%package -n %libname_web_devel
-Summary: Development libraries and headers for libreport
-Group:   Development/C
-Requires: %libname_web = %{version}-%{release}
-Provides: %name-web-devel = %{version}-%{release}
+%package -n %{libname_web_devel}
+Summary:	Development libraries and headers for libreport
+Group:		Development/C
+Requires:	%{libname_web} = %{version}-%{release}
+Provides:	%{name}-web-devel = %{version}-%{release}
 # (cg) The below require should be automatic, but due to the text .so files, it's not
-Requires: libxmlrpc-c-devel
+Requires:	libxmlrpc-c-devel
 
-%description -n %libname_web_devel
+%description -n %{libname_web_devel}
 Development libraries and headers for libreport-gtk
 
-%files -n %libname_web_devel
+%files -n %{libname_web_devel}
 %{_libdir}/libreport-web.so
 %{_libdir}/pkgconfig/libreport-web.pc
 
@@ -260,12 +259,12 @@ Python bindings for report-libs.
 #--------------------------------------------------------------------
 
 %package python
-Summary:        Python3 bindings for report-libs
+Summary:	Python3 bindings for report-libs
 # Is group correct here? -
-Group:          System/Libraries
-Requires:       libreport = %{version}-%{release}
-Provides:       report = 0.23-1
-Obsoletes:      report < 0.23-1
+Group:		System/Libraries
+Requires:	libreport = %{version}-%{release}
+Provides:	report = 0.23-1
+Obsoletes:	report < 0.23-1
 
 %description python
 Python bindings for report-libs.
@@ -466,10 +465,10 @@ Plugin to report bugs into the bugzilla.
 #--------------------------------------------------------------------
 
 %package plugin-ureport
-Summary: %{name}'s micro report plugin
-BuildRequires: json-c-devel
-Group: System/Libraries
-Requires: %{name} = %{version}-%{release}
+Summary:	%{name}'s micro report plugin
+BuildRequires:	json-c-devel
+Group:		System/Libraries
+Requires:	%{name} = %{version}-%{release}
 
 %description plugin-ureport
 Uploads micro-report to abrt server
@@ -530,8 +529,8 @@ Plugin to report bugs into anonymous FTP site associated with ticketing system.
 #--------------------------------------------------------------------
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
+
 #sed -i -e 's!-Werror!-Wno-deprecated!' configure{.ac,} */*/Makefile*
 perl -pi -e 's|bugzilla.redhat.com|issues.openmandriva.org|g' src/plugins/report_Bugzilla.xml{,.in} src/plugins/bugzilla.conf
 
@@ -547,10 +546,10 @@ perl -pi -e 's|bugzilla.redhat.com|issues.openmandriva.org|g' src/plugins/report
 	--without-python2
 %endif
 
-%make CFLAGS="%{optflags} -fno-strict-aliasing" 
+%make_build CFLAGS="%{optflags} -fno-strict-aliasing"
 
 %install
-%makeinstall_std mandir=%{_mandir}
+%make_install mandir=%{_mandir}
 %find_lang %{name}
 
 mkdir -p %{buildroot}%{_initrddir}
@@ -588,7 +587,6 @@ rm -f %{buildroot}%{_sysconfdir}/libreport/workflows.d/report_rhel.conf
 rm -f %{buildroot}%{_sysconfdir}/libreport/workflows.d/report_rhel_bugzilla.conf
 rm -f %{buildroot}%{_datadir}/libreport/conf.d/plugins/rhtsupport.conf
 find %{buildroot} -name *rhtsupport* -exec rm {} \;
-
 
 %if %{_with_tests}
 %check
