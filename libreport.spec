@@ -8,7 +8,7 @@
 Summary:	Generic library for reporting various problems
 Name:		libreport
 Version:	2.11.3
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
@@ -88,23 +88,23 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %{_datadir}/libreport/workflows/workflow_CentOSVmcore.xml
 %{_datadir}/libreport/workflows/workflow_CentOSXorg.xml
 %{_datadir}/libreport/workflows/workflow_uReport.xml
-%{_mandir}/man1/reporter-mantisbt.1.xz
-%{_mandir}/man1/reporter-systemd-journal.1.xz
-%{_mandir}/man5/centos_report_event.conf.5.xz
-%{_mandir}/man5/libreport.conf.5.xz
+%{_mandir}/man1/reporter-mantisbt.1*
+%{_mandir}/man1/reporter-systemd-journal.1*
+%{_mandir}/man5/centos_report_event.conf.5*
+%{_mandir}/man5/libreport.conf.5*
 %{_mandir}/man5/forbidden_words.conf.5*
 %{_mandir}/man5/report_event.conf.5*
 %{_mandir}/man5/ignored_words.conf.5*
-%{_mandir}/man5/mantisbt.conf.5.xz
-%{_mandir}/man5/mantisbt_format.conf.5.xz
-%{_mandir}/man5/mantisbt_format_analyzer_libreport.conf.5.xz
-%{_mandir}/man5/mantisbt_formatdup.conf.5.xz
-%{_mandir}/man5/mantisbt_formatdup_analyzer_libreport.conf.5.xz
-%{_mandir}/man5/report_CentOSBugTracker.conf.5.xz
-%{_mandir}/man5/report_Uploader.conf.5.xz
-%{_mandir}/man5/report_centos.conf.5.xz
-%{_mandir}/man5/report_uReport.conf.5.xz
-%{_mandir}/man5/upload.conf.5.xz
+%{_mandir}/man5/mantisbt.conf.5*
+%{_mandir}/man5/mantisbt_format.conf.5*
+%{_mandir}/man5/mantisbt_format_analyzer_libreport.conf.5*
+%{_mandir}/man5/mantisbt_formatdup.conf.5*
+%{_mandir}/man5/mantisbt_formatdup_analyzer_libreport.conf.5*
+%{_mandir}/man5/report_CentOSBugTracker.conf.5*
+%{_mandir}/man5/report_Uploader.conf.5*
+%{_mandir}/man5/report_centos.conf.5*
+%{_mandir}/man5/report_uReport.conf.5*
+%{_mandir}/man5/upload.conf.5*
 
 #--------------------------------------------------------------------
 
@@ -120,7 +120,6 @@ Applications for reporting bugs using libreport backend
 
 %files -n %{libname_dbus}
 %{_libdir}/libabrt_dbus.so.%{lib_major_dbus}*
-%{_datadir}/dbus-1/interfaces/*.xml
 
 #--------------------------------------------------------------------
 
@@ -451,6 +450,7 @@ Plugin to report bugs into the bugzilla.
 %{_datadir}/libreport/conf.d/plugins/bugzilla.conf
 %config(noreplace) %{_sysconfdir}/libreport/events/report_Bugzilla.conf
 %config(noreplace) %{_sysconfdir}/libreport/events.d/bugzilla_event.conf
+%config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla_formatdup_analyzer_libreport.conf
 # FIXME: remove with the old gui
 %{_mandir}/man1/reporter-bugzilla.1.*
 %{_mandir}/man5/bugzilla.conf.5.*
@@ -458,6 +458,7 @@ Plugin to report bugs into the bugzilla.
 %{_mandir}/man5/bugzilla_format.conf.5.*
 %{_mandir}/man5/bugzilla_format_analyzer_libreport.conf.*
 %{_mandir}/man5/bugzilla_format_kernel.conf.5.*
+%{_mandir}/man5/bugzilla_formatdup_analyzer_libreport.conf.5*
 %{_mandir}/man5/bugzilla_formatdup.conf.5.*
 %{_mandir}/man5/report_Bugzilla.conf.*
 %{_bindir}/reporter-bugzilla
