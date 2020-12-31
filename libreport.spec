@@ -7,12 +7,13 @@
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.11.3
-Release:	3
+Version:	2.14.0
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
-Source0:	https://github.com/abrt/libreport/archive/%{name}-%{version}.tar.gz
+Source0:	https://github.com/abrt/libreport/archive/%{version}/%{name}-%{version}.tar.gz
+Patch0:		libreport-2.14.0-clang.patch
 
 BuildRequires:	asciidoc
 BuildRequires:	augeas
@@ -64,7 +65,6 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %config(noreplace) %{_sysconfdir}/%{name}/plugins/mantisbt_formatdup.conf
 %config(noreplace) %{_sysconfdir}/%{name}/plugins/mantisbt_formatdup_analyzer_libreport.conf
 %config(noreplace) %{_sysconfdir}/%{name}/workflows.d/report_centos.conf
-%config(noreplace) %{_sysconfdir}/%{name}/workflows.d/report_rhel_add_data.conf
 %config(noreplace) %{_sysconfdir}/%{name}/workflows.d/report_uReport.conf
 %{_datadir}/augeas/lenses/libreport.aug
 %{_bindir}/reporter-mantisbt
@@ -77,7 +77,6 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %{_datadir}/libreport/conf.d/libreport.conf
 %{_datadir}/libreport/conf.d/plugins/mantisbt.conf
 %{_datadir}/libreport/events/report_CentOSBugTracker.xml
-%{_datadir}/libreport/events/report_RHTSupport_AddData.xml
 %{_datadir}/libreport/workflows/workflow_CentOSCCpp.xml
 %{_datadir}/libreport/workflows/workflow_CentOSJava.xml
 %{_datadir}/libreport/workflows/workflow_CentOSJavaScript.xml
@@ -108,22 +107,7 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 
 #--------------------------------------------------------------------
 
-%define lib_major_dbus 0
-%define libname_dbus %mklibname report-abrt_dbus %{lib_major_dbus}
-
-%package -n %{libname_dbus}
-Summary:	GTK front-end for libreport
-Group:		System/Libraries
-
-%description -n %{libname_dbus}
-Applications for reporting bugs using libreport backend
-
-%files -n %{libname_dbus}
-%{_libdir}/libabrt_dbus.so.%{lib_major_dbus}*
-
-#--------------------------------------------------------------------
-
-%define lib_major_web 0
+%define lib_major_web 1
 %define libname_web %mklibname report-web %{lib_major_web}
 
 %package -n %{libname_web}
@@ -158,7 +142,7 @@ Development libraries and headers for libreport-gtk
 
 #--------------------------------------------------------------------
 
-%define lib_major 0
+%define lib_major 1
 %define libname %mklibname report %{lib_major}
 
 %package -n %{libname}
@@ -194,7 +178,6 @@ Filesystem layout for libreport
 Summary:	Development libraries and headers for libreport
 Group:		Development/C
 Requires:	libreport = %{version}-%{release}
-Requires:	%{libname_dbus} = %{version}-%{release}
 Requires:	%{libname_web} = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
@@ -228,10 +211,8 @@ Development libraries and headers for libreport
 %{_includedir}/libreport/report_result.h
 
 # Private api headers:
-%{_includedir}/libreport/internal_abrt_dbus.h
 %{_includedir}/libreport/internal_libreport.h
 %{_libdir}/libreport.so
-%{_libdir}/libabrt_dbus.so
 %{_libdir}/pkgconfig/libreport.pc
 %dir %{_includedir}/libreport
 %dir %{_includedir}/libreport/helpers
@@ -322,7 +303,7 @@ Applications for reporting bugs using libreport backend
 
 #--------------------------------------------------------------------
 
-%define lib_major_gtk 0
+%define lib_major_gtk 1
 %define libname_gtk %mklibname report-gtk %{lib_major_gtk}
 
 %package -n %{libname_gtk}
@@ -481,20 +462,6 @@ Uploads micro-report to abrt server
 %{_mandir}/man5/ureport.conf.5.*
 %{_datadir}/libreport/conf.d/plugins/ureport.conf
 %config(noreplace) %{_sysconfdir}/libreport/plugins/ureport.conf
-
-#--------------------------------------------------------------------
-
-%package compat
-Summary:	%{name}'s compat layer for obsoleted 'report' package
-Group:		System/Libraries
-Requires:	%{name}-plugin-bugzilla
-
-%description compat
-Provides 'report' command-line tool.
-
-%files compat
-%{_bindir}/report
-%{_mandir}/man1/report.1.*
 
 #--------------------------------------------------------------------
 

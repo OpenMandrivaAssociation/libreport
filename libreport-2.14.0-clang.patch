@@ -1,0 +1,19 @@
+diff -up libreport-2.14.0/src/lib/configuration_files.c.omv~ libreport-2.14.0/src/lib/configuration_files.c
+--- libreport-2.14.0/src/lib/configuration_files.c.omv~	2020-12-31 17:09:30.108978534 +0100
++++ libreport-2.14.0/src/lib/configuration_files.c	2020-12-31 17:09:37.987211227 +0100
+@@ -259,6 +259,7 @@ bool libreport_load_conf_file(const char
+     bool retval = false;
+     char real_path[PATH_MAX + 1];
+     augeas *aug = NULL;
++    g_autofree char **matches = NULL;
+ 
+     if (!canonicalize_path(path, real_path))
+     {
+@@ -269,7 +270,6 @@ bool libreport_load_conf_file(const char
+     if (!internal_aug_init(&aug, real_path))
+         goto finalize;
+ 
+-    g_autofree char **matches = NULL;
+     int match_num = 0;
+     if (!internal_aug_get_all_option_names(aug, real_path, &matches, &match_num, GAON_FAIL_ON_NOENT))
+         goto finalize;
