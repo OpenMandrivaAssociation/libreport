@@ -13,7 +13,7 @@ License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
 Source0:	https://github.com/abrt/libreport/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:		libreport-2.14.0-clang.patch
+#Patch0:		libreport-2.14.0-clang.patch
 
 BuildRequires:	asciidoc
 BuildRequires:	augeas
