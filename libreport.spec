@@ -433,6 +433,7 @@ Plugin to report bugs into the bugzilla.
 %config(noreplace) %{_sysconfdir}/libreport/events/report_Bugzilla.conf
 %config(noreplace) %{_sysconfdir}/libreport/events.d/bugzilla_event.conf
 %config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla_formatdup_analyzer_libreport.conf
+%config(noreplace) %{_sysconfdir}/libreport/ignored_elements.conf
 # FIXME: remove with the old gui
 %{_mandir}/man1/reporter-bugzilla.1.*
 %{_mandir}/man5/bugzilla.conf.5.*
@@ -443,6 +444,7 @@ Plugin to report bugs into the bugzilla.
 %{_mandir}/man5/bugzilla_formatdup_analyzer_libreport.conf.5*
 %{_mandir}/man5/bugzilla_formatdup.conf.5.*
 %{_mandir}/man5/report_Bugzilla.conf.*
+%{_mandir}/man5/ignored_elements.conf.5.*
 %{_bindir}/reporter-bugzilla
 
 #--------------------------------------------------------------------
