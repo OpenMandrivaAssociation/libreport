@@ -7,13 +7,13 @@
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.14.0
-Release:	2
+Version:	2.16.0
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
 Source0:	https://github.com/abrt/libreport/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:		libreport-2.14.0-clang.patch
+#Patch0:		libreport-2.14.0-clang.patch
 
 BuildRequires:	asciidoc
 BuildRequires:	augeas
@@ -108,7 +108,7 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 
 #--------------------------------------------------------------------
 
-%define lib_major_web 1
+%define lib_major_web 2
 %define libname_web %mklibname report-web %{lib_major_web}
 
 %package -n %{libname_web}
@@ -143,7 +143,7 @@ Development libraries and headers for libreport-gtk
 
 #--------------------------------------------------------------------
 
-%define lib_major 1
+%define lib_major 2
 %define libname %mklibname report %{lib_major}
 
 %package -n %{libname}
@@ -433,6 +433,7 @@ Plugin to report bugs into the bugzilla.
 %config(noreplace) %{_sysconfdir}/libreport/events/report_Bugzilla.conf
 %config(noreplace) %{_sysconfdir}/libreport/events.d/bugzilla_event.conf
 %config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla_formatdup_analyzer_libreport.conf
+%config(noreplace) %{_sysconfdir}/libreport/ignored_elements.conf
 # FIXME: remove with the old gui
 %{_mandir}/man1/reporter-bugzilla.1.*
 %{_mandir}/man5/bugzilla.conf.5.*
@@ -443,6 +444,7 @@ Plugin to report bugs into the bugzilla.
 %{_mandir}/man5/bugzilla_formatdup_analyzer_libreport.conf.5*
 %{_mandir}/man5/bugzilla_formatdup.conf.5.*
 %{_mandir}/man5/report_Bugzilla.conf.*
+%{_mandir}/man5/ignored_elements.conf.5.*
 %{_bindir}/reporter-bugzilla
 
 #--------------------------------------------------------------------
