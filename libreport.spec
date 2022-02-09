@@ -304,7 +304,7 @@ Applications for reporting bugs using libreport backend
 
 #--------------------------------------------------------------------
 
-%define lib_major_gtk 2
+%define lib_major_gtk 1
 %define libname_gtk %mklibname report-gtk %{lib_major_gtk}
 
 %package -n %{libname_gtk}
