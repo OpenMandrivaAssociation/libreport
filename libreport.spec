@@ -108,7 +108,7 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 
 #--------------------------------------------------------------------
 
-%define lib_major_web 1
+%define lib_major_web 2
 %define libname_web %mklibname report-web %{lib_major_web}
 
 %package -n %{libname_web}
@@ -143,7 +143,7 @@ Development libraries and headers for libreport-gtk
 
 #--------------------------------------------------------------------
 
-%define lib_major 1
+%define lib_major 2
 %define libname %mklibname report %{lib_major}
 
 %package -n %{libname}
@@ -304,7 +304,7 @@ Applications for reporting bugs using libreport backend
 
 #--------------------------------------------------------------------
 
-%define lib_major_gtk 1
+%define lib_major_gtk 2
 %define libname_gtk %mklibname report-gtk %{lib_major_gtk}
 
 %package -n %{libname_gtk}
