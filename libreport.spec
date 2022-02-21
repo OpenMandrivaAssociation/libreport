@@ -8,7 +8,7 @@
 Summary:	Generic library for reporting various problems
 Name:		libreport
 Version:	2.16.0
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
@@ -88,23 +88,23 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %{_datadir}/libreport/workflows/workflow_CentOSVmcore.xml
 %{_datadir}/libreport/workflows/workflow_CentOSXorg.xml
 %{_datadir}/libreport/workflows/workflow_uReport.xml
-%{_mandir}/man1/reporter-mantisbt.1*
-%{_mandir}/man1/reporter-systemd-journal.1*
-%{_mandir}/man5/centos_report_event.conf.5*
-%{_mandir}/man5/libreport.conf.5*
-%{_mandir}/man5/forbidden_words.conf.5*
-%{_mandir}/man5/report_event.conf.5*
-%{_mandir}/man5/ignored_words.conf.5*
-%{_mandir}/man5/mantisbt.conf.5*
-%{_mandir}/man5/mantisbt_format.conf.5*
-%{_mandir}/man5/mantisbt_format_analyzer_libreport.conf.5*
-%{_mandir}/man5/mantisbt_formatdup.conf.5*
-%{_mandir}/man5/mantisbt_formatdup_analyzer_libreport.conf.5*
-%{_mandir}/man5/report_CentOSBugTracker.conf.5*
-%{_mandir}/man5/report_Uploader.conf.5*
-%{_mandir}/man5/report_centos.conf.5*
-%{_mandir}/man5/report_uReport.conf.5*
-%{_mandir}/man5/upload.conf.5*
+%doc %{_mandir}/man1/reporter-mantisbt.1*
+%doc %{_mandir}/man1/reporter-systemd-journal.1*
+%doc %{_mandir}/man5/centos_report_event.conf.5*
+%doc %{_mandir}/man5/libreport.conf.5*
+%doc %{_mandir}/man5/forbidden_words.conf.5*
+%doc %{_mandir}/man5/report_event.conf.5*
+%doc %{_mandir}/man5/ignored_words.conf.5*
+%doc %{_mandir}/man5/mantisbt.conf.5*
+%doc %{_mandir}/man5/mantisbt_format.conf.5*
+%doc %{_mandir}/man5/mantisbt_format_analyzer_libreport.conf.5*
+%doc %{_mandir}/man5/mantisbt_formatdup.conf.5*
+%doc %{_mandir}/man5/mantisbt_formatdup_analyzer_libreport.conf.5*
+%doc %{_mandir}/man5/report_CentOSBugTracker.conf.5*
+%doc %{_mandir}/man5/report_Uploader.conf.5*
+%doc %{_mandir}/man5/report_centos.conf.5*
+%doc %{_mandir}/man5/report_uReport.conf.5*
+%doc %{_mandir}/man5/upload.conf.5*
 
 #--------------------------------------------------------------------
 
@@ -120,7 +120,6 @@ Applications for reporting bugs using libreport backend
 
 %files -n %{libname_web}
 %{_libdir}/libreport-web.so.%{lib_major_web}*
-
 
 #--------------------------------------------------------------------
 
@@ -267,7 +266,7 @@ with problem dump reports
 
 %files cli
 %{_bindir}/report-cli
-%{_mandir}/man1/report-cli.1.*
+%doc %{_mandir}/man1/report-cli.1.*
 
 #--------------------------------------------------------------------
 
@@ -284,7 +283,7 @@ bugs
 
 %files newt
 %{_bindir}/report-newt
-%{_mandir}/man1/report-newt.1.*
+%doc %{_mandir}/man1/report-newt.1.*
 
 #--------------------------------------------------------------------
 
@@ -296,11 +295,11 @@ Provides:	report-gtk = 0.23-1
 Obsoletes:	report-gtk < 0.23-1
 
 %description gtk
-Applications for reporting bugs using libreport backend
+Applications for reporting bugs using libreport backend.
 
 %files gtk
 %{_bindir}/report-gtk
-%{_mandir}/man1/report-gtk.1.*
+%doc %{_mandir}/man1/report-gtk.1.*
 
 #--------------------------------------------------------------------
 
@@ -312,7 +311,7 @@ Summary:	GTK front-end for libreport
 Group:		System/Libraries
 
 %description -n %{libname_gtk}
-Applications for reporting bugs using libreport backend
+Applications for reporting bugs using libreport backend.
 
 %files -n %{libname_gtk}
 %{_libdir}/libreport-gtk.so.%{lib_major_gtk}*
@@ -329,7 +328,7 @@ Requires:	%{libname_gtk} = %{version}-%{release}
 Provides:	%{name}-gtk-devel = %{version}-%{release}
 
 %description -n %{lib_namegtk_devel}
-Development libraries and headers for libreport-gtk
+Development libraries and headers for libreport-gtk.
 
 %files -n %{lib_namegtk_devel}
 %{_libdir}/libreport-gtk.so
@@ -350,7 +349,7 @@ server, usually to kerneloops.org.
 
 %files plugin-kerneloops
 %{_datadir}/libreport/events/report_Kerneloops.xml
-%{_mandir}/man*/reporter-kerneloops.*
+%doc %{_mandir}/man*/reporter-kerneloops.*
 %{_bindir}/reporter-kerneloops
 
 #--------------------------------------------------------------------
@@ -375,10 +374,10 @@ The simple reporter plugin which writes a report to a specified file.
 %config(noreplace) %{_sysconfdir}/libreport/events.d/print_event.conf
 %config(noreplace) %{_sysconfdir}/libreport/workflows.d/report_logger.conf
 %{_bindir}/reporter-print
-%{_mandir}/man*/reporter-print.*
-%{_mandir}/man*/report_Logger.conf.*
-%{_mandir}/man*/print_event.conf.*
-%{_mandir}/man*/report_logger.conf.*
+%doc %{_mandir}/man*/reporter-print.*
+%doc %{_mandir}/man*/report_Logger.conf.*
+%doc %{_mandir}/man*/print_event.conf.*
+%doc %{_mandir}/man*/report_logger.conf.*
 
 #--------------------------------------------------------------------
 
@@ -400,10 +399,10 @@ email address.
 %config(noreplace) %{_sysconfdir}/libreport/workflows.d/report_mailx.conf
 %{_datadir}/libreport/conf.d/plugins/mailx.conf
 %{_datadir}/libreport/workflows/workflow_Mailx*.xml
-%{_mandir}/man*/mailx.conf.*
-%{_mandir}/man*/mailx_event.conf.*
-%{_mandir}/man*/report_mailx.conf.*
-%{_mandir}/man*/reporter-mailx.*
+%doc %{_mandir}/man*/mailx.conf.*
+%doc %{_mandir}/man*/mailx_event.conf.*
+%doc %{_mandir}/man*/report_mailx.conf.*
+%doc %{_mandir}/man*/reporter-mailx.*
 %{_bindir}/reporter-mailx
 
 #--------------------------------------------------------------------
@@ -435,16 +434,16 @@ Plugin to report bugs into the bugzilla.
 %config(noreplace) %{_sysconfdir}/libreport/plugins/bugzilla_formatdup_analyzer_libreport.conf
 %config(noreplace) %{_sysconfdir}/libreport/ignored_elements.conf
 # FIXME: remove with the old gui
-%{_mandir}/man1/reporter-bugzilla.1.*
-%{_mandir}/man5/bugzilla.conf.5.*
-%{_mandir}/man5/bugzilla_event.conf.5.*
-%{_mandir}/man5/bugzilla_format.conf.5.*
-%{_mandir}/man5/bugzilla_format_analyzer_libreport.conf.*
-%{_mandir}/man5/bugzilla_format_kernel.conf.5.*
-%{_mandir}/man5/bugzilla_formatdup_analyzer_libreport.conf.5*
-%{_mandir}/man5/bugzilla_formatdup.conf.5.*
-%{_mandir}/man5/report_Bugzilla.conf.*
-%{_mandir}/man5/ignored_elements.conf.5.*
+%doc %{_mandir}/man1/reporter-bugzilla.1.*
+%doc %{_mandir}/man5/bugzilla.conf.5.*
+%doc %{_mandir}/man5/bugzilla_event.conf.5.*
+%doc %{_mandir}/man5/bugzilla_format.conf.5.*
+%doc %{_mandir}/man5/bugzilla_format_analyzer_libreport.conf.*
+%doc %{_mandir}/man5/bugzilla_format_kernel.conf.5.*
+%doc %{_mandir}/man5/bugzilla_formatdup_analyzer_libreport.conf.5*
+%doc %{_mandir}/man5/bugzilla_formatdup.conf.5.*
+%doc %{_mandir}/man5/report_Bugzilla.conf.*
+%doc %{_mandir}/man5/ignored_elements.conf.5.*
 %{_bindir}/reporter-bugzilla
 
 #--------------------------------------------------------------------
@@ -456,13 +455,13 @@ Group:		System/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description plugin-ureport
-Uploads micro-report to abrt server
+Uploads micro-report to abrt server.
 
 %files plugin-ureport
 %{_datadir}/libreport/events/report_uReport.xml
 %{_bindir}/reporter-ureport
-%{_mandir}/man1/reporter-ureport.1.*
-%{_mandir}/man5/ureport.conf.5.*
+%doc %{_mandir}/man1/reporter-ureport.1.*
+%doc %{_mandir}/man5/ureport.conf.5.*
 %{_datadir}/libreport/conf.d/plugins/ureport.conf
 %config(noreplace) %{_sysconfdir}/libreport/plugins/ureport.conf
 
@@ -486,9 +485,9 @@ Obsoletes:	report-config-scp < 0.23-1
 Plugin to report bugs into anonymous FTP site associated with ticketing system.
 
 %files plugin-reportuploader
-%{_mandir}/man*/reporter-upload.*
-%{_mandir}/man*/uploader_event.conf.*
-%{_mandir}/man*/report_uploader.conf.*
+%doc %{_mandir}/man*/reporter-upload.*
+%doc %{_mandir}/man*/uploader_event.conf.*
+%doc %{_mandir}/man*/report_uploader.conf.*
 %{_bindir}/reporter-upload
 %{_datadir}/libreport/events/report_Uploader.xml
 %{_datadir}/libreport/conf.d/plugins/upload.conf
