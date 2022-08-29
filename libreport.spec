@@ -68,6 +68,7 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 %config(noreplace) %{_sysconfdir}/%{name}/workflows.d/report_centos.conf
 %config(noreplace) %{_sysconfdir}/%{name}/workflows.d/report_uReport.conf
 %{_datadir}/augeas/lenses/libreport.aug
+%{_bindir}/reporter-bugzilla-python
 %{_bindir}/reporter-mantisbt
 %{_bindir}/reporter-systemd-journal
 %dir %{_datadir}/libreport
