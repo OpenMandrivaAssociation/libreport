@@ -52,7 +52,6 @@ to different bug targets like Bugzilla, ftp, trac, etc...
 
 %files -f %{name}.lang
 %license COPYING
-%doc %{_docdir}/%{name}/README.md
 %config(noreplace) %{_sysconfdir}/%{name}/report_event.conf
 %config(noreplace) %{_sysconfdir}/%{name}/forbidden_words.conf
 %config(noreplace) %{_sysconfdir}/%{name}/ignored_words.conf
