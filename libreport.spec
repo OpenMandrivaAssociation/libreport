@@ -7,7 +7,7 @@
 
 Summary:	Generic library for reporting various problems
 Name:		libreport
-Version:	2.17.6
+Version:	2.17.8
 Release:	1
 License:	GPLv2+
 Group:		System/Libraries
