@@ -15,6 +15,11 @@ Url:		https://github.com/abrt/libreport
 Source0:	https://github.com/abrt/libreport/archive/%{version}/%{name}-%{version}.tar.gz
 #Patch0:		libreport-2.14.0-clang.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	asciidoc
 BuildRequires:	augeas
 BuildRequires:	augeas-devel
