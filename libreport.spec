@@ -8,7 +8,7 @@
 Summary:	Generic library for reporting various problems
 Name:		libreport
 Version:	2.17.15
-Release:	4
+Release:	5
 License:	GPLv2+
 Group:		System/Libraries
 Url:		https://github.com/abrt/libreport
@@ -43,7 +43,6 @@ BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(nettle)
 BuildRequires:	pkgconfig(nss)
-BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(satyr)
 BuildRequires:	pkgconfig(xmlrpc)
