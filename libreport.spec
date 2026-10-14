@@ -515,6 +515,11 @@ perl -pi -e 's|bugzilla.redhat.com|issues.openmandriva.org|g' src/plugins/report
 #intltoolize -f
 
 %build
+# libarchive.pc sets libdir to ${exec_prefix}/lib. On x86_64 that directory
+# is 32-bit, and lld then targets elf32-i386.
+mkdir -p pkgconfig-override
+sed 's|^libdir=.*|libdir=%{_libdir}|' "$(pkg-config --variable=pcfiledir libarchive)/libarchive.pc" > pkgconfig-override/libarchive.pc
+export PKG_CONFIG_PATH="$PWD/pkgconfig-override${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 %configure \
 %if ! %{with python2}
 	--without-python2
